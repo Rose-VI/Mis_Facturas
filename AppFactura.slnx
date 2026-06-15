@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AppFactura.Data/AppFactura.Data.csproj" />
+  <Project Path="AppFactura.Tests/AppFactura.Tests.csproj" />
+  <Project Path="AppFactura/AppFactura.csproj" />
+</Solution>

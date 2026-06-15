@@ -1,0 +1,62 @@
+# Compilación de .NET
+**/bin/
+**/obj/
+artifacts/
+
+# Visual Studio, Visual Studio Code y Rider
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Resultados de pruebas y cobertura
+TestResults/
+**/TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coverage.*
+
+# Paquetes y publicación
+*.nupkg
+*.snupkg
+*.apk
+*.aab
+*.apks
+publish/
+
+# Archivos de firma y secretos de Android
+*.keystore
+*.jks
+*.pfx
+*.p12
+*.cer
+*.key
+secrets.json
+appsettings.*.local.json
+
+# Bases de datos y almacenamiento local
+*.db
+*.db3
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Registros y archivos temporales
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+~$*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppFactura.Pages.InvoiceDetailPage"
+    x:Name="DetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AppFactura.Controls"
+    xmlns:vm="clr-namespace:AppFactura.ViewModels"
+    x:DataType="vm:InvoiceDetailViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Padding="10,14" BackgroundColor="{StaticResource Primary}" ColumnDefinitions="Auto,*,Auto,Auto">
+            <Button Text="‹" FontSize="32" Padding="8,0" BackgroundColor="Transparent" Clicked="OnBackClicked" />
+            <Label Grid.Column="1" Text="Detalle de factura" FontSize="21" FontFamily="OpenSansSemibold"
+                   TextColor="White" VerticalOptions="Center" />
+            <Button Grid.Column="2" Text="{Binding FavoriteIcon}" FontSize="27" TextColor="{StaticResource Tertiary}"
+                    BackgroundColor="Transparent" Command="{Binding ToggleFavoriteCommand}" />
+            <Button Grid.Column="3" Text="⋮" FontSize="25" BackgroundColor="Transparent" Clicked="OnActionsClicked" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="18" Spacing="18">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="{Binding Title}" FontSize="27" FontFamily="OpenSansSemibold" TextColor="{StaticResource Primary}" />
+                    <Label Text="{Binding DateTimeText}" FontSize="13" TextColor="{StaticResource MutedText}" />
+                </VerticalStackLayout>
+
+                <Border Padding="14" BackgroundColor="White" StrokeThickness="0" StrokeShape="RoundRectangle 14">
+                    <VerticalStackLayout Spacing="7">
+                        <Label Text="Memorándum" FontFamily="OpenSansSemibold" />
+                        <Label Text="{Binding Memorandum}" LineBreakMode="WordWrap" TextColor="{StaticResource Gray600}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Evidencias" FontFamily="OpenSansSemibold" FontSize="18" />
+                <CarouselView x:Name="EvidenceCarousel" ItemsSource="{Binding EvidencePaths}" HeightRequest="390"
+                              IndicatorView="EvidenceIndicator">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Null}">
+                            <Border Margin="4" BackgroundColor="#101719" StrokeThickness="0" StrokeShape="RoundRectangle 14">
+                                <controls:ZoomableImage Source="{Binding .}">
+                                    <controls:ZoomableImage.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={x:Reference DetailPage}, Path=BindingContext.OpenEvidenceCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </controls:ZoomableImage.GestureRecognizers>
+                                </controls:ZoomableImage>
+                            </Border>
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+                <IndicatorView x:Name="EvidenceIndicator" HorizontalOptions="Center" />
+                <Label Text="Pellizca para ampliar o toca para abrir con el visor de imágenes del teléfono."
+                       FontSize="12" TextColor="{StaticResource MutedText}" HorizontalTextAlignment="Center" />
+
+                <Label Text="{Binding StatusMessage}" TextColor="{StaticResource Danger}" FontSize="12" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

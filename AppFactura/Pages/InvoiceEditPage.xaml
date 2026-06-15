@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppFactura.Pages.InvoiceEditPage"
+    x:Name="EditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:AppFactura.ViewModels"
+    x:DataType="vm:InvoiceEditViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <Grid Padding="10,14" BackgroundColor="{StaticResource Primary}" ColumnDefinitions="Auto,*,Auto">
+            <Button Text="‹" FontSize="32" Padding="8,0" BackgroundColor="Transparent" Command="{Binding CancelCommand}" />
+            <Label Grid.Column="1" Text="{Binding PageTitle}" FontSize="21" FontFamily="OpenSansSemibold"
+                   TextColor="White" VerticalOptions="Center" />
+            <Button Grid.Column="2" Text="{Binding FavoriteIcon}" FontSize="27" TextColor="{StaticResource Tertiary}"
+                    BackgroundColor="Transparent" Command="{Binding ToggleFavoriteCommand}" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="14">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Título" FontFamily="OpenSansSemibold" />
+                    <Border BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 10">
+                        <Entry Text="{Binding Title}" Placeholder="Ej. Compra de materiales" MaxLength="160" />
+                    </Border>
+                    <Label Text="{Binding TitleError}" TextColor="{StaticResource Danger}" FontSize="12" />
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <VerticalStackLayout>
+                        <Label Text="Fecha" FontFamily="OpenSansSemibold" />
+                        <Border BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 10">
+                            <DatePicker Date="{Binding InvoiceDate}" />
+                        </Border>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Hora" FontFamily="OpenSansSemibold" />
+                        <Border BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 10">
+                            <TimePicker Time="{Binding InvoiceTime}" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Memorándum" FontFamily="OpenSansSemibold" />
+                    <Border BackgroundColor="White" Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 10">
+                        <Editor Text="{Binding Memorandum}" Placeholder="Agrega una nota opcional"
+                                MaxLength="2000" AutoSize="TextChanges" MinimumHeightRequest="110" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Evidencias" FontFamily="OpenSansSemibold" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="{Binding EvidenceCountText}" TextColor="{StaticResource MutedText}" VerticalOptions="Center" />
+                </Grid>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Tomar foto" Command="{Binding CaptureCommand}" />
+                    <Button Text="Galería" BackgroundColor="{StaticResource Gray600}" Command="{Binding PickCommand}" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding EvidenceError}" TextColor="{StaticResource Danger}" FontSize="12" />
+
+                <CollectionView ItemsSource="{Binding Evidences}" ItemsLayout="HorizontalList"
+                                HeightRequest="210" EmptyView="Agrega fotografías de la factura.">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:EvidenceItemViewModel">
+                            <Border WidthRequest="155" Margin="0,0,10,0" Padding="6" BackgroundColor="White"
+                                    Stroke="{StaticResource Gray200}" StrokeShape="RoundRectangle 12">
+                                <Grid RowDefinitions="135,Auto" ColumnDefinitions="*,*,*">
+                                    <Image Grid.ColumnSpan="3" Source="{Binding LocalPath}" Aspect="AspectFill" />
+                                    <Button Grid.Row="1" Text="◀" Padding="0" FontFamily="sans-serif"
+                                            SemanticProperties.Description="Mover evidencia a la izquierda"
+                                            BackgroundColor="{StaticResource Gray500}"
+                                            Command="{Binding Source={x:Reference EditPage}, Path=BindingContext.MoveLeftCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    <Button Grid.Row="1" Grid.Column="1" Text="X" Padding="0" FontFamily="sans-serif"
+                                            SemanticProperties.Description="Eliminar evidencia"
+                                            BackgroundColor="{StaticResource Danger}"
+                                            Command="{Binding Source={x:Reference EditPage}, Path=BindingContext.RemoveEvidenceCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    <Button Grid.Row="1" Grid.Column="2" Text="▶" Padding="0" FontFamily="sans-serif"
+                                            SemanticProperties.Description="Mover evidencia a la derecha"
+                                            BackgroundColor="{StaticResource Gray500}"
+                                            Command="{Binding Source={x:Reference EditPage}, Path=BindingContext.MoveRightCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Text="{Binding StatusMessage}" TextColor="{StaticResource Danger}" FontSize="12" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="2" Padding="16,10,16,16" BackgroundColor="White" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Button Text="Cancelar" BackgroundColor="{StaticResource Gray500}" Command="{Binding CancelCommand}" />
+            <Button Grid.Column="1" Text="Guardar factura" Command="{Binding SaveCommand}" IsEnabled="{Binding IsNotBusy}" />
+        </Grid>
+    </Grid>
+</ContentPage>
